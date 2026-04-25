@@ -415,7 +415,7 @@ const tierNames = { conqueror:"Conqueror", ace:"Ace", diamond:"Diamond", platinu
 function renderCards() {
   const search = (document.getElementById("search").value || "").toLowerCase();
   let list = allAccounts.filter(a => {
-    const raw = (a["النص الكامل"] || "").toLowerCase();
+    const raw = (a["النص"] || a["النص الكامل"] || "").toLowerCase();
     const tier = detectTier(raw);
     const matchFilter = currentFilter === "all" || tier === currentFilter;
     const matchSearch = !search || raw.includes(search);
@@ -434,7 +434,7 @@ function renderCards() {
   }
 
   grid.innerHTML = list.map((a, idx) => {
-    const raw   = a["النص الكامل"] || "";
+    const raw   = a["النص"] || a["النص الكامل"] || "";
     const price = a["السعر"] ? parseInt(a["السعر"]).toLocaleString("ar-EG") : "—";
     const level = a["اللفل"] || "—";
     const myths = a["عدد الميثك"] || "—";
