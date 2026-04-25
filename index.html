@@ -313,7 +313,7 @@ header {
       <div class="live-dot"></div>
       <span>مباشر</span>
     </div>
-    <a class="tg-btn" href="https://t.me/Goudzla_2" target="_blank">
+    <a class="tg-btn" href="https://t.me/YOUR_CHANNEL" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247l-2.02 9.52c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.084 14.61l-2.95-.924c-.642-.203-.654-.642.134-.953l11.52-4.44c.535-.194 1.003.13.774.954z"/></svg>
       القناة
     </a>
@@ -321,14 +321,15 @@ header {
 </header>
 
 <div class="filters-wrap">
-  <span class="filter-label">الرانك:</span>
+  <span class="filter-label">الفئة السعرية:</span>
   <button class="f-btn active" onclick="setFilter('all',this)">الكل</button>
-  <button class="f-btn" onclick="setFilter('conqueror',this)">Conqueror</button>
-  <button class="f-btn" onclick="setFilter('ace',this)">Ace</button>
-  <button class="f-btn" onclick="setFilter('diamond',this)">Diamond</button>
-  <button class="f-btn" onclick="setFilter('platinum',this)">Platinum</button>
-  <button class="f-btn" onclick="setFilter('gold',this)">Gold</button>
-  <input class="search-box" id="search" placeholder="ابحث... (ميثك، M416...)" oninput="renderCards()">
+  <button class="f-btn" onclick="setFilter('under10',this)">تحت 10 آلاف</button>
+  <button class="f-btn" onclick="setFilter('10k-20k',this)">10,000 - 20,000</button>
+  <button class="f-btn" onclick="setFilter('above20',this)">فوق 20 ألف</button>
+  
+  <input class="search-box" id="search" placeholder="ابحث بـ ID أو ميثك أو وصف..." oninput="renderCards()">
+  
+  
 </div>
 
 <div class="stats-bar">
@@ -353,7 +354,7 @@ header {
 // ===== إعداد واحد بس - حط رابط الـ CSV هنا =====
 // File → Share → Publish to web → CSV → انسخ الرابط
 const CSV_URL    = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLtfgLAXEk7sc7u-wphM0QxBlbJKUlS8qWahY3wtxN-eBsA-NlD8EkkC3ULe1yqfWFbcArYhe8l51T/pub?output=csv";
-const TG_CHANNEL = "https://t.me/Goudzla_2";
+const TG_CHANNEL = "https://t.me/goudzl";
 // =================================================
 
 document.querySelector('.tg-btn').href = TG_CHANNEL;
@@ -399,16 +400,6 @@ async function loadData() {
   }
 }
 
-// تحديد الرانك من النص
-function detectTier(text) {
-  text = (text || "").toLowerCase();
-  if (text.includes("conqueror") || text.includes("كونكر")) return "conqueror";
-  if (text.includes("ace")) return "ace";
-  if (text.includes("diamond") || text.includes("دايموند")) return "diamond";
-  if (text.includes("platinum") || text.includes("بلاتينيوم")) return "platinum";
-  if (text.includes("gold") || text.includes("جولد")) return "gold";
-  return "default";
-}
 
 const tierNames = { conqueror:"Conqueror", ace:"Ace", diamond:"Diamond", platinum:"Platinum", gold:"Gold", default:"غير محدد" };
 
@@ -429,7 +420,7 @@ function renderCards() {
 
   const grid = document.getElementById("grid");
   if (!list.length) {
-    grid.innerHTML = `<div class="empty">لا توجد أكاونتات ${currentFilter !== "all" ? "بهذا الرانك" : ""} حالياً</div>`;
+    grid.innerHTML = `<div class="empty">لا توجد أكاونتات ${currentFilter !== "all" ? "بهذا السعر حاليا" : ""} حالياً</div>`;
     return;
   }
 
