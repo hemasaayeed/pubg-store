@@ -321,15 +321,14 @@ header {
 </header>
 
 <div class="filters-wrap">
-  <span class="filter-label">الفئة السعرية:</span>
+  <span class="filter-label">الرانك:</span>
   <button class="f-btn active" onclick="setFilter('all',this)">الكل</button>
-  <button class="f-btn" onclick="setFilter('under10',this)">تحت 10 آلاف</button>
-  <button class="f-btn" onclick="setFilter('10k-20k',this)">10,000 - 20,000</button>
-  <button class="f-btn" onclick="setFilter('above20',this)">فوق 20 ألف</button>
-  
-  <input class="search-box" id="search" placeholder="ابحث بـ ID أو ميثك أو وصف..." oninput="renderCards()">
-  
-  
+  <button class="f-btn" onclick="setFilter('conqueror',this)">Conqueror</button>
+  <button class="f-btn" onclick="setFilter('ace',this)">Ace</button>
+  <button class="f-btn" onclick="setFilter('diamond',this)">Diamond</button>
+  <button class="f-btn" onclick="setFilter('platinum',this)">Platinum</button>
+  <button class="f-btn" onclick="setFilter('gold',this)">Gold</button>
+  <input class="search-box" id="search" placeholder="ابحث... (ميثك، M416...)" oninput="renderCards()">
 </div>
 
 <div class="stats-bar">
@@ -420,7 +419,7 @@ function renderCards() {
 
   const grid = document.getElementById("grid");
   if (!list.length) {
-    grid.innerHTML = `<div class="empty">لا توجد أكاونتات ${currentFilter !== "all" ? "بهذا السعر حاليا" : ""} حالياً</div>`;
+    grid.innerHTML = `<div class="empty">لا توجد أكاونتات ${currentFilter !== "all" ? "بهذا الرانك" : ""} حالياً</div>`;
     return;
   }
 
