@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر أكاونتات PUBG</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #c9a227;
+  --gold-light: #f0c84a;
+  --bg: #070c17;
+  --bg2: #0d1628;
+  --bg3: #111e35;
+  --border: #1e2d45;
+  --text: #dce8f5;
+  --muted: #4a6a8a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(180deg, #0d1a2e 0%, #070c17 100%);
+  border-bottom: 1px solid var(--gold);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+.logo span { color: #fff; }
+
+.header-right { display: flex; align-items: center; gap: 12px; }
+
+.live-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #2ecc71;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2ecc71;
+  animation: blink 1.8s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.tg-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: #0088cc; color: #fff;
+  padding: 8px 16px; border-radius: 22px;
+  font-size: 13px; font-weight: 600;
+  text-decoration: none;
+  transition: background .15s;
+}
+.tg-btn:hover { background: #0077bb; }
+.tg-btn svg { width: 16px; height: 16px; fill: #fff; }
+
+/* FILTERS */
+.filters-wrap {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex; align-items: center;
+  gap: 8px; flex-wrap: wrap;
+}
+
+.filter-label { font-size: 12px; color: var(--muted); }
+
+.f-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 15px;
+  border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  transition: all .15s;
+}
+.f-btn:hover { border-color: var(--gold); color: var(--gold); }
+.f-btn.active { background: var(--gold); border-color: var(--gold); color: #0a0f1a; font-weight: 700; }
+
+.search-box {
+  margin-right: auto;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 14px;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+  transition: border-color .15s;
+}
+.search-box:focus { border-color: var(--gold); }
+.search-box::placeholder { color: var(--muted); }
+
+/* STATS */
+.stats-bar {
+  background: #060b14;
+  border-bottom: 1px solid #111d2e;
+  padding: 10px 24px;
+  display: flex; gap: 28px; flex-wrap: wrap;
+}
+.stat { font-size: 13px; color: var(--muted); }
+.stat strong { color: var(--gold); }
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+/* CARD */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color .2s, transform .2s;
+}
+.card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+.tier-bar { height: 3px; }
+.t-conqueror { background: linear-gradient(90deg,#ff4500,#ff8c00); }
+.t-ace       { background: linear-gradient(90deg,#9b30ff,#d070ff); }
+.t-diamond   { background: linear-gradient(90deg,#00bfff,#4fc3f7); }
+.t-platinum  { background: linear-gradient(90deg,#00e5cc,#26c6da); }
+.t-gold      { background: linear-gradient(90deg,#c9a227,#f0c84a); }
+.t-default   { background: var(--border); }
+
+/* صورة الأكاونت */
+.card-img {
+  width: 100%; height: 160px;
+  object-fit: cover;
+  display: block;
+  background: var(--bg3);
+}
+.card-img-placeholder {
+  width: 100%; height: 120px;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 13px;
+}
+
+.card-body { padding: 14px 16px; }
+
+.card-head {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 10px;
+}
+
+.acc-id {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px; color: var(--gold); font-weight: 600;
+}
+.acc-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.tier-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: 4px;
+  letter-spacing: .5px; white-space: nowrap;
+}
+.tb-conqueror { background:#ff450022;color:#ff6b35;border:1px solid #ff450044; }
+.tb-ace       { background:#9b30ff22;color:#c084fc;border:1px solid #9b30ff44; }
+.tb-diamond   { background:#00bfff22;color:#38bdf8;border:1px solid #00bfff44; }
+.tb-platinum  { background:#00e5cc22;color:#2dd4bf;border:1px solid #00e5cc44; }
+.tb-gold      { background:#c9a22722;color:#c9a227;border:1px solid #c9a22744; }
+.tb-default   { background:#1e2d45;color:#7a9ab8;border:1px solid #2a3d55; }
+
+/* تفاصيل سريعة */
+.quick-stats {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px; margin-bottom: 10px;
+}
+.qs { background:#060b14;border-radius:6px;padding:6px 8px;text-align:center; }
+.qs .ql { font-size:11px;color:var(--muted);display:block;margin-bottom:2px; }
+.qs .qv { font-size:13px;font-weight:600;color:var(--text); }
+
+/* نص البوست */
+.post-text {
+  font-size: 12px;
+  color: #8aaccc;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 11px;
+}
+
+.price {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--gold);
+}
+.price small { font-size: 13px; color: #7a8a6a; font-family: 'Cairo', sans-serif; }
+
+.buy-btn {
+  background: var(--gold);
+  color: #0a0f1a;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 7px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  transition: background .15s, transform .1s;
+}
+.buy-btn:hover { background: var(--gold-light); }
+.buy-btn:active { transform: scale(.97); }
+.buy-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* شارة SOLD */
+.sold-overlay {
+  position: absolute; inset: 0;
+  background: rgba(7,12,23,.75);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3;
+}
+.sold-stamp {
+  background: #c0392b; color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 24px; font-weight: 700;
+  padding: 8px 28px; border-radius: 7px;
+  letter-spacing: 3px;
+  transform: rotate(-10deg);
+  border: 2px solid #e74c3c;
+}
+
+/* شارة جديد */
+.new-badge {
+  position: absolute; top: 10px; right: 10px;
+  background: #27ae60; color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 4px;
+  letter-spacing: .5px; z-index: 4;
+}
+
+/* Loading & Empty */
+.loading, .empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--muted);
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Lightbox */
+.lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.85); z-index: 999;
+  align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 90%; max-height: 90vh; border-radius: 8px; }
+.lightbox-close {
+  position: absolute; top: 20px; left: 20px;
+  background: var(--gold); color: #000;
+  border: none; border-radius: 50%;
+  width: 36px; height: 36px;
+  font-size: 18px; cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; padding: 12px 16px; }
+  .filters-wrap { padding: 10px 16px; }
+  .search-box { width: 100%; margin-right: 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PUBG <span>STORE</span></div>
+  <div class="header-right">
+    <div class="live-indicator">
+      <div class="live-dot"></div>
+      <span>مباشر</span>
+    </div>
+    <a class="tg-btn" href="https://t.me/YOUR_CHANNEL" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247l-2.02 9.52c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.084 14.61l-2.95-.924c-.642-.203-.654-.642.134-.953l11.52-4.44c.535-.194 1.003.13.774.954z"/></svg>
+      القناة
+    </a>
+  </div>
+</header>
+
+<div class="filters-wrap">
+  <span class="filter-label">الرانك:</span>
+  <button class="f-btn active" onclick="setFilter('all',this)">الكل</button>
+  <button class="f-btn" onclick="setFilter('conqueror',this)">Conqueror</button>
+  <button class="f-btn" onclick="setFilter('ace',this)">Ace</button>
+  <button class="f-btn" onclick="setFilter('diamond',this)">Diamond</button>
+  <button class="f-btn" onclick="setFilter('platinum',this)">Platinum</button>
+  <button class="f-btn" onclick="setFilter('gold',this)">Gold</button>
+  <input class="search-box" id="search" placeholder="ابحث... (ميثك، M416...)" oninput="renderCards()">
+</div>
+
+<div class="stats-bar">
+  <div class="stat">متاح: <strong id="cnt-available">—</strong></div>
+  <div class="stat">مباع: <strong id="cnt-sold">—</strong></div>
+  <div class="stat">آخر تحديث: <strong id="last-update">—</strong></div>
+  <div class="stat" style="margin-right:auto">
+    <button class="f-btn" onclick="loadData()" style="padding:3px 10px;font-size:11px">↻ تحديث</button>
+  </div>
+</div>
+
+<div class="grid" id="grid">
+  <div class="loading"><div class="spinner"></div><p>جاري تحميل الأكاونتات...</p></div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+// ===== إعدادات - عدلها =====
+const SHEET_ID   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLtfgLAXEk7sc7u-wphM0QxBlbJKUlS8qWahY3wtxN-eBsA-NlD8EkkC3ULe1yqfWFbcArYhe8l51T/pub?output=csv";
+const API_KEY    = "ضع_Google_API_Key_هنا";
+const TG_CHANNEL = "https://t.me/goudzl";
+const SHEET_NAME = "PUBG Accounts";
+// ============================
+
+document.querySelector('.tg-btn').href = TG_CHANNEL;
+
+let allAccounts = [];
+let currentFilter = "all";
+
+// جلب البيانات من Google Sheets
+async function loadData() {
+  document.getElementById("last-update").textContent = "جاري التحديث...";
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const rows = data.values || [];
+    if (rows.length < 2) { allAccounts = []; renderCards(); return; }
+
+    const headers = rows[0];
+    allAccounts = rows.slice(1).map((row, i) => {
+      const obj = {};
+      headers.forEach((h, j) => obj[h] = row[j] || "");
+      obj._index = i;
+      return obj;
+    }).reverse(); // أحدث أول
+
+    renderCards();
+    document.getElementById("last-update").textContent =
+      new Date().toLocaleTimeString("ar-EG", {hour:"2-digit", minute:"2-digit"});
+  } catch(e) {
+    console.error(e);
+    document.getElementById("grid").innerHTML =
+      `<div class="empty">⚠️ فشل تحميل البيانات<br><small>${e.message}</small></div>`;
+  }
+}
+
+// تحديد الرانك من النص
+function detectTier(text) {
+  text = (text || "").toLowerCase();
+  if (text.includes("conqueror") || text.includes("كونكر")) return "conqueror";
+  if (text.includes("ace")) return "ace";
+  if (text.includes("diamond") || text.includes("دايموند")) return "diamond";
+  if (text.includes("platinum") || text.includes("بلاتينيوم")) return "platinum";
+  if (text.includes("gold") || text.includes("جولد")) return "gold";
+  return "default";
+}
+
+const tierNames = { conqueror:"Conqueror", ace:"Ace", diamond:"Diamond", platinum:"Platinum", gold:"Gold", default:"غير محدد" };
+
+function renderCards() {
+  const search = (document.getElementById("search").value || "").toLowerCase();
+  let list = allAccounts.filter(a => {
+    const raw = (a["النص الكامل"] || "").toLowerCase();
+    const tier = detectTier(raw);
+    const matchFilter = currentFilter === "all" || tier === currentFilter;
+    const matchSearch = !search || raw.includes(search);
+    return matchFilter && matchSearch;
+  });
+
+  const avail = allAccounts.filter(a => (a["الحالة"] || "متاح") === "متاح").length;
+  const sold  = allAccounts.filter(a => a["الحالة"] === "مباع").length;
+  document.getElementById("cnt-available").textContent = avail;
+  document.getElementById("cnt-sold").textContent = sold;
+
+  const grid = document.getElementById("grid");
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty">لا توجد أكاونتات ${currentFilter !== "all" ? "بهذا الرانك" : ""} حالياً</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((a, idx) => {
+    const raw   = a["النص الكامل"] || "";
+    const price = a["السعر"] ? parseInt(a["السعر"]).toLocaleString("ar-EG") : "—";
+    const level = a["اللفل"] || "—";
+    const myths = a["عدد الميثك"] || "—";
+    const date  = a["التاريخ"] || "";
+    const imgUrl= a["رابط الصورة"] || "";
+    const status= a["الحالة"] || "متاح";
+    const contact= a["التواصل"] || "";
+    const accId = a["ID"] || `ACC-${idx+1}`;
+    const tier  = detectTier(raw);
+    const isNew = idx < 3;
+    const isSold= status === "مباع";
+
+    return `
+    <div class="card" data-tier="${tier}">
+      <div class="tier-bar t-${tier}"></div>
+      ${isNew && !isSold ? `<div class="new-badge">جديد</div>` : ""}
+      ${isSold ? `<div class="sold-overlay"><div class="sold-stamp">SOLD</div></div>` : ""}
+
+      ${imgUrl
+        ? `<img class="card-img" src="${imgUrl}" alt="أكاونت" onclick="openLightbox('${imgUrl}')" style="cursor:zoom-in">`
+        : `<div class="card-img-placeholder">لا توجد صورة</div>`
+      }
+
+      <div class="card-body">
+        <div class="card-head">
+          <div>
+            <div class="acc-id">${accId}</div>
+            <div class="acc-date">${date.split(" ")[0] || ""}</div>
+          </div>
+          <div class="tier-badge tb-${tier}">${tierNames[tier]}</div>
+        </div>
+
+        <div class="quick-stats">
+          <div class="qs"><span class="ql">اللفل</span><span class="qv">${level}</span></div>
+          <div class="qs"><span class="ql">ميثك</span><span class="qv">${myths}</span></div>
+          <div class="qs"><span class="ql">التواصل</span><span class="qv" style="font-size:11px">${contact || "—"}</span></div>
+        </div>
+
+        <div class="post-text">${raw.replace(/\n/g, " ▪ ")}</div>
+
+        <div class="card-footer">
+          <div class="price">${price} <small>جـ</small></div>
+          <button class="buy-btn"
+            ${isSold ? "disabled" : ""}
+            onclick="buyNow('${contact}', '${accId}')">
+            ${isSold ? "مباع" : "شراء الآن"}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll(".f-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderCards();
+}
+
+function buyNow(contact, id) {
+  const tg = contact.startsWith("@") ? `https://t.me/${contact.slice(1)}` : TG_CHANNEL;
+  window.open(tg + `?text=مرحبا، أنا مهتم بالأكاونت ${id}`, "_blank");
+}
+
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").classList.add("open");
+}
+function closeLightbox() {
+  document.getElementById("lightbox").classList.remove("open");
+}
+
+// تحميل عند الفتح وتحديث كل 5 دقايق
+loadData();
+setInterval(loadData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
