@@ -399,6 +399,16 @@ async function loadData() {
   }
 }
 
+// تحديد الرانك من النص
+function detectTier(text) {
+  text = (text || "").toLowerCase();
+  if (text.includes("conqueror") || text.includes("كونكر")) return "conqueror";
+  if (text.includes("ace")) return "ace";
+  if (text.includes("diamond") || text.includes("دايموند")) return "diamond";
+  if (text.includes("platinum") || text.includes("بلاتينيوم")) return "platinum";
+  if (text.includes("gold") || text.includes("جولد")) return "gold";
+  return "default";
+}
 
 const tierNames = { conqueror:"Conqueror", ace:"Ace", diamond:"Diamond", platinum:"Platinum", gold:"Gold", default:"غير محدد" };
 
