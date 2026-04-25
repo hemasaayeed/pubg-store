@@ -350,43 +350,52 @@ header {
 </div>
 
 <script>
-// ===== إعدادات - عدلها =====
-const SHEET_ID   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLtfgLAXEk7sc7u-wphM0QxBlbJKUlS8qWahY3wtxN-eBsA-NlD8EkkC3ULe1yqfWFbcArYhe8l51T/pub?output=csv";
-const API_KEY    = "ضع_Google_API_Key_هنا";
+// ===== إعداد واحد بس - حط رابط الـ CSV هنا =====
+// File → Share → Publish to web → CSV → انسخ الرابط
+const CSV_URL    = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLtfgLAXEk7sc7u-wphM0QxBlbJKUlS8qWahY3wtxN-eBsA-NlD8EkkC3ULe1yqfWFbcArYhe8l51T/pub?output=csv";
 const TG_CHANNEL = "https://t.me/goudzl";
-const SHEET_NAME = "PUBG Accounts";
-// ============================
+// =================================================
 
 document.querySelector('.tg-btn').href = TG_CHANNEL;
 
 let allAccounts = [];
 let currentFilter = "all";
 
-// جلب البيانات من Google Sheets
+// تحويل CSV لـ Array
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(",").map(h => h.trim().replace(/"/g,""));
+  return lines.slice(1).map(line => {
+    const vals = [];
+    let cur = "", inQ = false;
+    for (let c of line) {
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { vals.push(cur.trim()); cur = ""; }
+      else cur += c;
+    }
+    vals.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || "").replace(/"/g,""));
+    return obj;
+  });
+}
+
+// جلب البيانات من Google Sheets CSV
 async function loadData() {
   document.getElementById("last-update").textContent = "جاري التحديث...";
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+    const url = CSV_URL + "&t=" + Date.now(); // منع الكاش
     const res = await fetch(url);
-    const data = await res.json();
-    const rows = data.values || [];
-    if (rows.length < 2) { allAccounts = []; renderCards(); return; }
-
-    const headers = rows[0];
-    allAccounts = rows.slice(1).map((row, i) => {
-      const obj = {};
-      headers.forEach((h, j) => obj[h] = row[j] || "");
-      obj._index = i;
-      return obj;
-    }).reverse(); // أحدث أول
-
+    const text = await res.text();
+    allAccounts = parseCSV(text).reverse(); // أحدث أول
     renderCards();
     document.getElementById("last-update").textContent =
       new Date().toLocaleTimeString("ar-EG", {hour:"2-digit", minute:"2-digit"});
   } catch(e) {
     console.error(e);
     document.getElementById("grid").innerHTML =
-      `<div class="empty">⚠️ فشل تحميل البيانات<br><small>${e.message}</small></div>`;
+      `<div class="empty">⚠️ فشل تحميل البيانات<br><small>تأكد إن الشيت منشور كـ CSV</small></div>`;
   }
 }
 
