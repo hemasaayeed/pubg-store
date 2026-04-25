@@ -1,0 +1,2 @@
+# pubg-store
+goudzla store 
